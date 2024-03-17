@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using PeopleInc.Data;
 using PeopleInc.Models;
@@ -44,6 +45,18 @@ namespace PeopleInc.Services
         public override void ValidarCampos(Pessoa registro)
         {
             registro.ValidarCampos();
+        }
+        public override void TratarErro(Exception ex)
+        {
+            if (ex.InnerException is SqliteException)
+            {
+                SqliteException sqlException = (SqliteException)ex.InnerException;
+                if (sqlException.SqliteErrorCode == 19 && sqlException.SqliteExtendedErrorCode == 2067)
+                {
+                    throw new ArgumentException("O e-mail informado já está cadastrado para outra pessoa.");
+                }
+            }
+            throw ex;
         }
     }
 }

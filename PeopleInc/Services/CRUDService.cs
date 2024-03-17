@@ -25,18 +25,11 @@ namespace PeopleInc.Services
             {
                 _context.SaveChanges();
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                SqliteException sqlException = (SqliteException)ex.InnerException;
-                if (sqlException.SqliteErrorCode == 19 && sqlException.SqliteExtendedErrorCode == 2067)
-                {
-                    throw new ArgumentException("O e-mail informado já está cadastrado para outra pessoa.");
-                }
-                else
-                {
-                    throw;
-                }
+               TratarErro(ex);
             }
         }
+        public abstract void TratarErro(Exception ex);
     }
 }

@@ -12,5 +12,6 @@ namespace PeopleInc.Services
         public void Deleta(long id);
         public void Salvar();
         public void ValidarCampos(T registro);
+        public void TratarErro(Exception ex);
     }
 }
